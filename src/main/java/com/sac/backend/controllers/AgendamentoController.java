@@ -1,10 +1,7 @@
 package com.sac.backend.controllers;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
-import javax.mail.MessagingException;
 
 import com.sac.backend.models.AgendamentoModel;
 import com.sac.backend.services.AgendamentoService;
