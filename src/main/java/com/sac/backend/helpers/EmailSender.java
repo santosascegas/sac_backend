@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailSender {
 
+    private String nome;
+    private String emailUsuario;
+    private String assunto;
+    private String conteudo;
+
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -30,6 +35,23 @@ public class EmailSender {
             javaMailSender.send(msg);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void emailFaleconosco(){
+        try {
+            MimeMessage msg = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(msg);
+
+            helper.setTo("renato@hotmail.com");
+
+            helper.setSubject(assunto);
+            helper.setText("Email de " + nome + "\nemail: " + emailUsuario + "\n\n" + conteudo);
+
+            javaMailSender.send(msg);
+            }
+         catch (Exception e) {
+             e.printStackTrace();
         }
     }
 }
