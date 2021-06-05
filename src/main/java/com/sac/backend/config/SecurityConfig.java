@@ -1,12 +1,15 @@
 package com.sac.backend.config;
 
+import com.sac.backend.interfaces.AdministradorRepository;
 import com.sac.backend.security.JWTAuthenticationFilter;
+import com.sac.backend.security.JWTAuthorizationFilter;
 import com.sac.backend.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,8 +22,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final String[] PUBLIC_MATCHERS = { "/categorias/**" };
+    private static final String[] PUBLIC_MATCHERS = { "/login/**" };
 
     private static final String[] PUBLIC_MATCHERS_POST = { "/administrador/**" };
 
@@ -29,6 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService uds;
+
+    @Autowired
+    private AdministradorRepository adminrepo;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -39,7 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(
-                authenticationManager(), jwtUtil));
+                authenticationManager(), jwtUtil, adminrepo));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(),
+                jwtUtil, userDetailsService()));
     }
 
     @Override

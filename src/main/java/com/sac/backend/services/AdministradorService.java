@@ -29,9 +29,19 @@ public class AdministradorService implements ServiceInterface<AdministradorModel
 
     public AdministradorService() {}
 
+    @Override
     public AdministradorModel create(AdministradorModel admin) {
         admin.setSenha(pswdEnconder.encode(admin.getSenha()));
         return administradorRepository.save(admin);
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        if (administradorRepository.existsById(id)) {
+            administradorRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -49,27 +59,21 @@ public class AdministradorService implements ServiceInterface<AdministradorModel
         return (List<AdministradorModel>) administradorRepository.findAll();
     }
 
+    @Override
+    public boolean update(AdministradorModel obj) {
+        if (administradorRepository.existsById(obj.getId())) {
+            obj.setSenha(pswdEnconder.encode(obj.getSenha()));
+            administradorRepository.save(obj);
+            return true;
+        }
+        return false;
+    }
+
     public static UserDetailsImpl authenticated() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             return (UserDetailsImpl) auth.getPrincipal();
         }
         return null;
-    }
-
-    public Optional<AdministradorModel> getAdministrador(Long id) {
-        return administradorRepository.findById(id);
-    }
-
-    public void addAdministrador(AdministradorModel administradorModel) {
-        administradorRepository.save(administradorModel);
-    }
-
-    public void updateAdministrador(String id, AdministradorModel administradorModel) {
-        administradorRepository.save(administradorModel);
-    }
-
-    public void deleteAdministrador(Long id) {
-        administradorRepository.deleteById(id);
     }
 }

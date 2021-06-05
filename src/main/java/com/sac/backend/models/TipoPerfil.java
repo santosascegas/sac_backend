@@ -7,7 +7,7 @@ package com.sac.backend.models;
  */
 
 public enum TipoPerfil {
-    ADMIN(1, "ROLE_ADMIN"), CLIENTE(2, "ROLE_CLIENTE");
+    ADMIN(1, "ROLE_ADMIN");
 
     private Integer cod;
     private String desc;

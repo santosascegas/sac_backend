@@ -7,6 +7,7 @@ package com.sac.backend.exception;
  */
 
 public class AuthorizedException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
     public AuthorizedException(String s) {
         super(s);
