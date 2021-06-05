@@ -16,12 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author Maurício Freire
- * Date 03/06/2021 at 18:03
- * Created on IntelliJ IDEA
- */
-
 @SuppressWarnings("ALL")
 @RestController
 @RequestMapping(value = "/datas")

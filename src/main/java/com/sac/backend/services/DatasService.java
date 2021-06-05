@@ -10,12 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author Maurício Freire
- * Date 03/06/2021 at 18:15
- * Created on IntelliJ IDEA
- */
-
 @Service
 public class DatasService implements ServiceInterface<DatasModel> {
 
