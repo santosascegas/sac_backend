@@ -2,6 +2,7 @@ package com.sac.backend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sac.backend.DTO.CredencialDTO;
+import com.sac.backend.interfaces.AdministradorRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,10 +20,13 @@ import java.util.Date;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authMan;
     private JWTUtil jwtUtil;
+    private AdministradorRepository admrepo;
 
-    public JWTAuthenticationFilter(AuthenticationManager authMan, JWTUtil jwtUtil) {
+    public JWTAuthenticationFilter(AuthenticationManager authMan,
+               JWTUtil jwtUtil, AdministradorRepository admrepo) {
         this.authMan = authMan;
         this.jwtUtil = jwtUtil;
+        this.admrepo = admrepo;
     }
 
     @Override
@@ -69,14 +73,3 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 + "\"path\": \"/login\"}";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
