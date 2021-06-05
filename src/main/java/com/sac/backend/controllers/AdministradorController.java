@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,23 +27,6 @@ public class AdministradorController implements Control<AdministradorModel> {
     private AdministradorService administradorService;
 
     @Override
-    @PostMapping
-    public ResponseEntity<AdministradorModel> post(@RequestBody
-               AdministradorModel administradorModel) {
-        administradorService.create(administradorModel);
-        return ResponseEntity.ok(administradorModel);
-    }
-
-    @Override
-    @PutMapping
-    public ResponseEntity<?> put(@RequestBody
-                AdministradorModel administradorModel) {
-        if (administradorService.update(administradorModel))
-            return ResponseEntity.ok(administradorModel);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @Override
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
@@ -54,8 +36,13 @@ public class AdministradorController implements Control<AdministradorModel> {
     }
 
     @Override
+    public ResponseEntity<List<AdministradorModel>> getAll() {
+        return ResponseEntity.ok(administradorService.findAll());
+    }
+
+    @Override
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> get(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             AdministradorModel _admin = administradorService.findById(id);
             if (_admin != null)
@@ -67,7 +54,18 @@ public class AdministradorController implements Control<AdministradorModel> {
     }
 
     @Override
-    public ResponseEntity<List<AdministradorModel>> getAll() {
-        return ResponseEntity.ok(administradorService.findAll());
+    @PostMapping
+    public ResponseEntity<AdministradorModel> post(@RequestBody
+                AdministradorModel administradorModel) {
+        administradorService.create(administradorModel);
+        return ResponseEntity.ok(administradorModel);
+    }
+
+    @Override
+    @PutMapping
+    public ResponseEntity<?> put(@RequestBody AdministradorModel administradorModel) {
+        if (administradorService.update(administradorModel))
+            return ResponseEntity.ok(administradorModel);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

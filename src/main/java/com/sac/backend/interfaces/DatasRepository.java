@@ -12,7 +12,7 @@ import java.util.List;
  * Date 03/06/2021 at 18:31
  * Created on IntelliJ IDEA
  */
-public interface DatasRepository extends JpaRepository<DatasModel, Date> {
+public interface DatasRepository extends JpaRepository<DatasModel, Long> {
 
     @Query("SELECT * FROM Datas WHERE ic_disponivel = true ORDER BY id")
     List<DatasModel> findByDisponibilidade();
