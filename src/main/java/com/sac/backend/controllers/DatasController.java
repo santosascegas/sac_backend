@@ -45,9 +45,8 @@ public class DatasController implements Control<DatasModel> {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         DatasModel _datasModel = datasService.findById(id);
-        if (_datasModel != null)
-            return ResponseEntity.ok(_datasModel);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return _datasModel != null ? ResponseEntity.ok(_datasModel) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @Override
@@ -59,8 +58,7 @@ public class DatasController implements Control<DatasModel> {
     @Override
     @PutMapping
     public ResponseEntity<?> put(@RequestBody DatasModel datasModel) {
-        if (datasService.update(datasModel))
-            return ResponseEntity.ok(datasModel);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return datasService.update(datasModel) ? ResponseEntity.ok(datasModel) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

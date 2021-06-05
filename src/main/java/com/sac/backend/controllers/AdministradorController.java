@@ -30,9 +30,8 @@ public class AdministradorController implements Control<AdministradorModel> {
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        if (administradorService.delete(id))
-            return ResponseEntity.ok().build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return administradorService.delete(id) ? ResponseEntity.ok().build() :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @Override
@@ -45,9 +44,8 @@ public class AdministradorController implements Control<AdministradorModel> {
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
             AdministradorModel _admin = administradorService.findById(id);
-            if (_admin != null)
-                return ResponseEntity.ok(_admin);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return _admin != null ? ResponseEntity.ok(_admin) :
+                    ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (AuthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -57,15 +55,14 @@ public class AdministradorController implements Control<AdministradorModel> {
     @PostMapping
     public ResponseEntity<AdministradorModel> post(@RequestBody
                 AdministradorModel administradorModel) {
-        administradorService.create(administradorModel);
-        return ResponseEntity.ok(administradorModel);
+        return ResponseEntity.ok(administradorService.create(administradorModel));
     }
 
     @Override
     @PutMapping
     public ResponseEntity<?> put(@RequestBody AdministradorModel administradorModel) {
-        if (administradorService.update(administradorModel))
-            return ResponseEntity.ok(administradorModel);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return administradorService.update(administradorModel) ? ResponseEntity
+                .ok(administradorModel) : ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .build();
     }
 }

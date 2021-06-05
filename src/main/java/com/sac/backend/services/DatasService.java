@@ -6,6 +6,7 @@ import com.sac.backend.models.DatasModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +57,7 @@ public class DatasService implements ServiceInterface<DatasModel> {
         return datasRepository.findByDisponibilidade();
     }
 
-    public List<DatasModel> findBySemana() {
-        return datasRepository.findBySemana();
+    public List<DatasModel> findByDataBetween(Date inicio, Date fim) {
+        return datasRepository.findByDataBetween(inicio, fim);
     }
 }
