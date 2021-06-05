@@ -6,7 +6,6 @@ import com.sac.backend.models.DatasModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +28,13 @@ public class DatasService implements ServiceInterface<DatasModel> {
     }
 
     @Override
-    public DatasModel findByData(Date date) {
-        Optional<DatasModel> _datas = datasRepository.findById(date);
+    public boolean delete(Long id) {
+        return false;
+    }
+
+    @Override
+    public DatasModel findById(Long id) {
+        Optional<DatasModel> _datas = datasRepository.findById(id);
         return _datas.orElse(null);
     }
 
@@ -41,15 +45,10 @@ public class DatasService implements ServiceInterface<DatasModel> {
 
     @Override
     public boolean update(DatasModel obj) {
-        if (datasRepository.existsById(obj.getData())) {
+        if (datasRepository.existsById(obj.getId())) {
             datasRepository.save(obj);
             return true;
         }
-        return false;
-    }
-
-    @Override
-    public boolean delete(Long id) {
         return false;
     }
 

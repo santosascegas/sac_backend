@@ -1,6 +1,6 @@
 package com.sac.backend.controllers;
 
-import com.sac.backend.interfaces.InterfaceControle;
+import com.sac.backend.interfaces.Control;
 import com.sac.backend.models.DatasModel;
 import com.sac.backend.services.DatasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,21 +25,26 @@ import java.util.List;
 @SuppressWarnings("ALL")
 @RestController
 @RequestMapping(value = "/datas")
-public class DatasController implements InterfaceControle<DatasModel> {
+public class DatasController implements Control<DatasModel> {
 
     @Autowired
     private DatasService datasService;
 
     @Override
-    @GetMapping
-    public ResponseEntity<List<?>> findAll() {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        return datasService.delete(id) ? ResponseEntity.ok().build() :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @Override
+    public ResponseEntity<List<DatasModel>> getAll() {
         return ResponseEntity.ok(datasService.findAll());
     }
 
     @Override
-    @GetMapping(value = "{data}")
-    public ResponseEntity<?> getByData(@PathVariable("datas")Date date) {
-        DatasModel _datasModel = datasService.findByData(date);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+        DatasModel _datasModel = datasService.findById(id);
         if (_datasModel != null)
             return ResponseEntity.ok(_datasModel);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
