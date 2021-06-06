@@ -55,3 +55,9 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2021-05-24 13:23:27
+
+CREATE TABLE `sac`.`usuarios_admin` (
+  `id_usuario` INT NOT NULL AUTO_INCREMENT,
+  `nm_usua_login` VARCHAR(255) NULL,
+  `nm_usua_senha` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_usuario`));

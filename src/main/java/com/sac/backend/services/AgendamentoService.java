@@ -46,6 +46,5 @@ public class AgendamentoService {
 
     public void deleteAgendamento(Long id) {
         agendamentoRepository.deleteById(id);
-        ;
     }
 }
