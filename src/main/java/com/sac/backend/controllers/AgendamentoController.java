@@ -7,6 +7,7 @@ import com.sac.backend.models.AgendamentoModel;
 import com.sac.backend.services.AgendamentoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +32,8 @@ public class AgendamentoController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = "application/json")
-    public void addAgendamento(@RequestBody AgendamentoModel agendamento) {
-        agendamentoService.addAgendamento(agendamento);
+    public ResponseEntity<AgendamentoModel> addAgendamento(@RequestBody AgendamentoModel agendamento) {
+        return ResponseEntity.ok(agendamentoService.addAgendamento(agendamento));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
