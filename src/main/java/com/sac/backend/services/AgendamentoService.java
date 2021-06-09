@@ -36,7 +36,8 @@ public class AgendamentoService {
     }
 
     public void addAgendamento(AgendamentoModel agendamento) {
-        emailSender.enviarEmailConfirmacao();
+        emailSender.enviarEmailConfirmacao(agendamento);
+        emailSender.enviarEmailConfirmacaoAdmin(agendamento);
         agendamentoRepository.save(agendamento);
     }
 
