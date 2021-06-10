@@ -35,10 +35,9 @@ public class AgendamentoService {
         return agendamentoRepository.findById(id);
     }
 
-    public AgendamentoModel addAgendamento(AgendamentoModel agendamento) {
-        emailSender.enviarEmailConfirmacao(agendamento);
-        emailSender.enviarEmailConfirmacaoAdmin(agendamento);
-        return agendamentoRepository.save(agendamento);
+    public void addAgendamento(AgendamentoModel agendamento) {
+        emailSender.enviarEmailConfirmacao();
+        agendamentoRepository.save(agendamento);
     }
 
     public void updateAgendamento(String id, AgendamentoModel agendamento) {

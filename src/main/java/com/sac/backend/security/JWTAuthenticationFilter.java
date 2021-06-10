@@ -1,11 +1,8 @@
 package com.sac.backend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.sac.backend.DTO.CredencialDTO;
 import com.sac.backend.interfaces.AdministradorRepository;
-import com.sac.backend.models.AdministradorModel;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,20 +14,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authMan;
     private JWTUtil jwtUtil;
-    private AdministradorRepository admRepo;
+    private AdministradorRepository admrepo;
 
     public JWTAuthenticationFilter(AuthenticationManager authMan,
                JWTUtil jwtUtil, AdministradorRepository admrepo) {
         this.authMan = authMan;
         this.jwtUtil = jwtUtil;
-        this.admRepo = admrepo;
+        this.admrepo = admrepo;
     }
 
     @Override
@@ -52,30 +48,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-        HttpServletResponse response, FilterChain chain,
-        Authentication authResult) throws IOException, ServletException {
-        
+            HttpServletResponse response, FilterChain chain, Authentication authResult)
+            throws IOException, ServletException {
+
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
-        
-        response.addHeader("Authentication", "Bearer " + token);
-        
         response.addHeader("access-control-expose-headers", "Authorization");
-        
-        AdministradorModel adm = admRepo.findByLogin(username);
-        
-        adm.setSenha(null);
-        
-        Gson gson = new Gson();
-        String cliStr = gson.toJson(adm);
-        
-        PrintWriter out = response.getWriter();
-        
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        
-        out.print(cliStr);
-        out.flush();
     }
 
     @Override

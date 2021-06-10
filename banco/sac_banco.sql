@@ -56,7 +56,7 @@ UNLOCK TABLES;
 
 -- Dump completed on 2021-05-24 13:23:27
 
-CREATE TABLE `usuarios_admin` (
+CREATE TABLE `sac`.`usuarios_admin` (
   `id_usuario` INT NOT NULL AUTO_INCREMENT,
   `nm_usua_login` VARCHAR(255) NULL,
   `nm_usua_senha` VARCHAR(45) NULL,

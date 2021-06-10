@@ -17,7 +17,7 @@ public class AgendamentoModel {
     private Long id;
 
     @Column(name = "dt_trajeto")
-    private String dt;
+    private LocalDateTime dt;
 
     @Column(name = "nm_usuario")
     private String nomeUsuario;
@@ -34,7 +34,7 @@ public class AgendamentoModel {
     @Column(name = "tp_atestado")
     private int atestado;
 
-    public AgendamentoModel(Long id, String dt, String nomeUsuario, String emailUsuario, String documento,
+    public AgendamentoModel(Long id, LocalDateTime dt, String nomeUsuario, String emailUsuario, String documento,
             String telefone, int atestado) {
         this.id = id;
         this.dt = dt;
@@ -56,11 +56,11 @@ public class AgendamentoModel {
         this.id = id;
     }
 
-    public String getDt() {
+    public LocalDateTime getDt() {
         return dt;
     }
 
-    public void setDt(String dt) {
+    public void setDt(LocalDateTime dt) {
         this.dt = dt;
     }
 

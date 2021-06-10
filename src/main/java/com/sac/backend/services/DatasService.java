@@ -6,7 +6,6 @@ import com.sac.backend.models.DatasModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +22,9 @@ public class DatasService implements ServiceInterface<DatasModel> {
         return obj;
     }
 
-    public void deleteData(Long id) {
-        datasRepository.deleteById(id);
+    @Override
+    public boolean delete(Long id) {
+        return false;
     }
 
     @Override
@@ -35,10 +35,7 @@ public class DatasService implements ServiceInterface<DatasModel> {
 
     @Override
     public List<DatasModel> findAll() {
-        List datas = new ArrayList<DatasModel>();
-        datasRepository.findAll().forEach(datas::add);
-
-        return datas;
+        return datasRepository.findAll();
     }
 
     @Override
@@ -50,10 +47,11 @@ public class DatasService implements ServiceInterface<DatasModel> {
         return false;
     }
 
-    @Override
-    public boolean delete(Long id) {
-        // TODO Auto-generated method stub
-        return false;
+    public List<DatasModel> findByDisponibilidade() {
+        return datasRepository.findByDisponibilidade();
     }
 
+    public List<DatasModel> findByDataBetween(Date inicio, Date fim) {
+        return datasRepository.findByDataBetween(inicio, fim);
+    }
 }

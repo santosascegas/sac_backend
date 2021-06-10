@@ -24,12 +24,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    // private static final String[] PUBLIC_MATCHERS = { "/login/**" };
-    private static final String[] PUBLIC_MATCHERS = { "/**" };
+    private static final String[] PUBLIC_MATCHERS = { "/login/**" };
 
-    // private static final String[] PUBLIC_MATCHERS_POST = { "/administrador/**" };
-    private static final String[] PUBLIC_MATCHERS_POST = { "/**" };
-    private static final String[] PUBLIC_MATCHERS_DELETE = { "/**" };
+    private static final String[] PUBLIC_MATCHERS_POST = { "/administrador/**" };
 
     @Autowired
     private JWTUtil jwtUtil;
@@ -47,7 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS).permitAll()
                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-                .antMatchers(HttpMethod.DELETE, PUBLIC_MATCHERS_DELETE).permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(
                 authenticationManager(), jwtUtil, adminrepo));
