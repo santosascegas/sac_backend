@@ -1,8 +1,11 @@
 package com.sac.backend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.sac.backend.DTO.CredencialDTO;
-import com.sac.backend.interfaces.AdministradorRepository;
+import com.sac.backend.interfaces.UsuarioRepository;
+import com.sac.backend.models.Usuario;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,19 +17,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authMan;
     private JWTUtil jwtUtil;
-    private AdministradorRepository admrepo;
+    private UsuarioRepository usuarioRepo;
 
     public JWTAuthenticationFilter(AuthenticationManager authMan,
-               JWTUtil jwtUtil, AdministradorRepository admrepo) {
+               JWTUtil jwtUtil, UsuarioRepository usuarioRepo) {
         this.authMan = authMan;
         this.jwtUtil = jwtUtil;
-        this.admrepo = admrepo;
+        this.usuarioRepo = usuarioRepo;
     }
 
     @Override
@@ -40,7 +44,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     UsernamePasswordAuthenticationToken(cdto.getLogin(),
                     cdto.getSenha(), new ArrayList<>());
 
-            return authMan.authenticate(authToken);
+            Authentication auth = authMan.authenticate(authToken);
+            return auth;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -48,12 +53,30 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-            HttpServletResponse response, FilterChain chain, Authentication authResult)
-            throws IOException, ServletException {
-
+        HttpServletResponse response, FilterChain chain,
+        Authentication authResult) throws IOException, ServletException {
+        
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
+        
+        response.addHeader("Authentication", "Bearer " + token);
+        
         response.addHeader("access-control-expose-headers", "Authorization");
+        
+        Usuario usuario = usuarioRepo.findByLogin(username);
+        
+        usuario.setSenha(null);
+        
+        Gson gson = new Gson();
+        String cliStr = gson.toJson(usuario);
+        
+        PrintWriter out = response.getWriter();
+        
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        out.print(cliStr);
+        out.flush();
     }
 
     @Override

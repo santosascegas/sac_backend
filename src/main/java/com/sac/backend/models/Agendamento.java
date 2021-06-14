@@ -1,23 +1,20 @@
 package com.sac.backend.models;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "agendamento")
-public class AgendamentoModel {
+@Table(name = "tb_agendamento")
+public class Agendamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "dt_trajeto")
-    private LocalDateTime dt;
 
     @Column(name = "nm_usuario")
     private String nomeUsuario;
@@ -34,10 +31,13 @@ public class AgendamentoModel {
     @Column(name = "tp_atestado")
     private int atestado;
 
-    public AgendamentoModel(Long id, LocalDateTime dt, String nomeUsuario, String emailUsuario, String documento,
+    @OneToOne
+    @JoinColumn(name = "fk_data_id", unique = true)
+    private Datas data;
+
+    public Agendamento(Long id, String nomeUsuario, String emailUsuario, String documento,
             String telefone, int atestado) {
         this.id = id;
-        this.dt = dt;
         this.nomeUsuario = nomeUsuario;
         this.emailUsuario = emailUsuario;
         this.documento = documento;
@@ -45,7 +45,7 @@ public class AgendamentoModel {
         this.atestado = atestado;
     }
 
-    public AgendamentoModel() {
+    public Agendamento() {
     }
 
     public Long getId() {
@@ -54,14 +54,6 @@ public class AgendamentoModel {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public LocalDateTime getDt() {
-        return dt;
-    }
-
-    public void setDt(LocalDateTime dt) {
-        this.dt = dt;
     }
 
     public String getNomeUsuario() {
@@ -102,6 +94,14 @@ public class AgendamentoModel {
 
     public void setAtestado(int atestado) {
         this.atestado = atestado;
+    }
+ 
+    public Datas getData() {
+        return this.data;
+    }
+
+    public void setData(Datas data) {
+        this.data = data;
     }
 
 }

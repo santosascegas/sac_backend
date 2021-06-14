@@ -2,50 +2,42 @@ package com.sac.backend.services;
 
 import com.sac.backend.interfaces.DatasRepository;
 import com.sac.backend.interfaces.ServiceInterface;
-import com.sac.backend.models.DatasModel;
+import com.sac.backend.models.Datas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author Maurício Freire
- * Date 03/06/2021 at 18:15
- * Created on IntelliJ IDEA
- */
-
 @Service
-public class DatasService implements ServiceInterface<DatasModel> {
+public class DatasService implements ServiceInterface<Datas> {
 
     @Autowired
     private DatasRepository datasRepository;
 
     @Override
-    public DatasModel create(DatasModel obj) {
+    public Datas create(Datas obj) {
         datasRepository.save(obj);
         return obj;
     }
 
     @Override
-    public boolean delete(Long id) {
-        return false;
+    public Optional<Datas> findById(Long id) {
+        Optional<Datas> _datas = datasRepository.findById(id);
+        return _datas;
     }
 
     @Override
-    public DatasModel findById(Long id) {
-        Optional<DatasModel> _datas = datasRepository.findById(id);
-        return _datas.orElse(null);
+    public List<Datas> findAll() {
+        List<Datas> datas = new ArrayList<Datas>();
+        datasRepository.findAll().forEach(datas::add);
+
+        return datas;
     }
 
     @Override
-    public List<DatasModel> findAll() {
-        return datasRepository.findAll();
-    }
-
-    @Override
-    public boolean update(DatasModel obj) {
+    public boolean update(Datas obj) {
         if (datasRepository.existsById(obj.getId())) {
             datasRepository.save(obj);
             return true;
@@ -53,11 +45,17 @@ public class DatasService implements ServiceInterface<DatasModel> {
         return false;
     }
 
-    public List<DatasModel> findByDisponibilidade() {
-        return datasRepository.findByDisponibilidade();
+    @Override
+    public boolean delete(Long id) {
+        if (datasRepository.existsById(id)) {
+            datasRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
-    public List<DatasModel> findByDataBetween(Date inicio, Date fim) {
-        return datasRepository.findByDataBetween(inicio, fim);
+    public List<Datas> listarPorStatus() {
+        return datasRepository.listarPorStatus();
     }
+
 }

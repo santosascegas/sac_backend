@@ -3,7 +3,7 @@ package com.sac.backend.services;
 import com.sac.backend.exception.AuthorizedException;
 import com.sac.backend.interfaces.AdministradorRepository;
 import com.sac.backend.interfaces.ServiceInterface;
-import com.sac.backend.models.AdministradorModel;
+import com.sac.backend.models.Administrador;
 import com.sac.backend.security.JWTUtil;
 import com.sac.backend.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AdministradorService implements ServiceInterface<AdministradorModel> {
+public class AdministradorService implements ServiceInterface<Administrador> {
 
     @Autowired
     private AdministradorRepository administradorRepository;
@@ -30,7 +31,7 @@ public class AdministradorService implements ServiceInterface<AdministradorModel
     public AdministradorService() {}
 
     @Override
-    public AdministradorModel create(AdministradorModel admin) {
+    public Administrador create(Administrador admin) {
         admin.setSenha(pswdEnconder.encode(admin.getSenha()));
         return administradorRepository.save(admin);
     }
@@ -45,35 +46,27 @@ public class AdministradorService implements ServiceInterface<AdministradorModel
     }
 
     @Override
-    public AdministradorModel findById(Long id) throws AuthorizedException {
-        if (!jwtUtil.authorized(id))
-            throw new AuthorizedException("Acesso Negado!");
-
-        Optional<AdministradorModel> _admin =
+    public Optional<Administrador> findById(Long id) throws AuthorizedException {
+        Optional<Administrador> _admin =
                 administradorRepository.findById(id);
-        return _admin.orElse(null);
+        return _admin;
     }
 
     @Override
-    public List<AdministradorModel> findAll() {
-        return (List<AdministradorModel>) administradorRepository.findAll();
+    public List<Administrador> findAll() {
+        List<Administrador> admins = new ArrayList<>();
+        administradorRepository.findAll().forEach(admins::add);
+
+        return admins;
     }
 
     @Override
-    public boolean update(AdministradorModel obj) {
+    public boolean update(Administrador obj) {
         if (administradorRepository.existsById(obj.getId())) {
             obj.setSenha(pswdEnconder.encode(obj.getSenha()));
             administradorRepository.save(obj);
             return true;
         }
         return false;
-    }
-
-    public static UserDetailsImpl authenticated() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            return (UserDetailsImpl) auth.getPrincipal();
-        }
-        return null;
     }
 }

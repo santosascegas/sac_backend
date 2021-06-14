@@ -1,7 +1,7 @@
 package com.sac.backend.security;
 
 import com.sac.backend.models.TipoPerfil;
-import com.sac.backend.services.AdministradorService;
+import com.sac.backend.services.UsuarioService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -55,7 +55,7 @@ public class JWTUtil {
     }
 
     public boolean authorized(Long id) {
-        UserDetailsImpl userDetails = AdministradorService.authenticated();
+        UserDetailsImpl userDetails = UsuarioService.authenticated();
         if (userDetails == null || (!userDetails.hasRole(TipoPerfil.ADMIN)
                 && !id.equals(userDetails.getId()))) {
             return false;
