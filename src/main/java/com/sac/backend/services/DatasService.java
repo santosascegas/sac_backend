@@ -54,4 +54,8 @@ public class DatasService implements ServiceInterface<Datas> {
         return false;
     }
 
+    public List<Datas> listarPorStatus() {
+        return datasRepository.listarPorStatus();
+    }
+
 }

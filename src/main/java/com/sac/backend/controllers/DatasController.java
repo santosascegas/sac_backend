@@ -62,4 +62,9 @@ public class DatasController implements Control<Datas> {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @GetMapping(value = "/status")
+	public ResponseEntity<List<Datas>> getByStatus() {
+		return ResponseEntity.ok(datasService.listarPorStatus());
+	}
+
 }

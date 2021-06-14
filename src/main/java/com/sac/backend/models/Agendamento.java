@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,9 +15,6 @@ public class Agendamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "dt_trajeto")
-    private String dt;
 
     @Column(name = "nm_usuario")
     private String nomeUsuario;
@@ -32,10 +31,13 @@ public class Agendamento {
     @Column(name = "tp_atestado")
     private int atestado;
 
-    public Agendamento(Long id, String dt, String nomeUsuario, String emailUsuario, String documento,
+    @OneToOne
+    @JoinColumn(name = "fk_data_id", unique = true)
+    private Datas data;
+
+    public Agendamento(Long id, String nomeUsuario, String emailUsuario, String documento,
             String telefone, int atestado) {
         this.id = id;
-        this.dt = dt;
         this.nomeUsuario = nomeUsuario;
         this.emailUsuario = emailUsuario;
         this.documento = documento;
@@ -52,14 +54,6 @@ public class Agendamento {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getDt() {
-        return dt;
-    }
-
-    public void setDt(String dt) {
-        this.dt = dt;
     }
 
     public String getNomeUsuario() {
@@ -100,6 +94,14 @@ public class Agendamento {
 
     public void setAtestado(int atestado) {
         this.atestado = atestado;
+    }
+ 
+    public Datas getData() {
+        return this.data;
+    }
+
+    public void setData(Datas data) {
+        this.data = data;
     }
 
 }

@@ -8,6 +8,7 @@ import javax.mail.internet.MimeMessage;
 
 import com.sac.backend.models.Agendamento;
 import com.sac.backend.models.FaleConosco;
+import com.sac.backend.services.DatasService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class EmailSender {
             helper.setFrom(emailAdmin);
             helper.setTo(agendamentoModel.getEmailUsuario());
 
-            String[] data = agendamentoModel.getDt().split("&");
+            String[] data = agendamentoModel.getData().getData().split("&");
 
             String dia = data[0];
             String horario = data[1];
@@ -73,7 +74,7 @@ public class EmailSender {
             helper.setFrom(agendamentoModel.getEmailUsuario());
             helper.setTo(emailAdmin);
 
-            String[] data = agendamentoModel.getDt().split("&");
+            String[] data = agendamentoModel.getData().getData().split("&");
             
             String dia = data[0];
             String horario = data[1];
