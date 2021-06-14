@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,18 +46,18 @@ public class AdministradorService implements ServiceInterface<Administrador> {
     }
 
     @Override
-    public Administrador findById(Long id) throws AuthorizedException {
-        if (!jwtUtil.authorized(id))
-            throw new AuthorizedException("Acesso Negado!");
-
+    public Optional<Administrador> findById(Long id) throws AuthorizedException {
         Optional<Administrador> _admin =
                 administradorRepository.findById(id);
-        return _admin.orElse(null);
+        return _admin;
     }
 
     @Override
     public List<Administrador> findAll() {
-        return (List<Administrador>) administradorRepository.findAll();
+        List<Administrador> admins = new ArrayList<>();
+        administradorRepository.findAll().forEach(admins::add);
+
+        return admins;
     }
 
     @Override

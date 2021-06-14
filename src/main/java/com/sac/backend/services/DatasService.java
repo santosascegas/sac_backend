@@ -22,14 +22,10 @@ public class DatasService implements ServiceInterface<Datas> {
         return obj;
     }
 
-    public void deleteData(Long id) {
-        datasRepository.deleteById(id);
-    }
-
     @Override
-    public Datas findById(Long id) {
+    public Optional<Datas> findById(Long id) {
         Optional<Datas> _datas = datasRepository.findById(id);
-        return _datas.orElse(null);
+        return _datas;
     }
 
     @Override
@@ -51,7 +47,10 @@ public class DatasService implements ServiceInterface<Datas> {
 
     @Override
     public boolean delete(Long id) {
-        // TODO Auto-generated method stub
+        if (datasRepository.existsById(id)) {
+            datasRepository.deleteById(id);
+            return true;
+        }
         return false;
     }
 

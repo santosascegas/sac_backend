@@ -6,43 +6,57 @@ import java.util.Optional;
 
 import com.sac.backend.helpers.EmailSender;
 import com.sac.backend.interfaces.AgendamentoRepository;
+import com.sac.backend.interfaces.ServiceInterface;
 import com.sac.backend.models.Agendamento;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AgendamentoService {
+public class AgendamentoService implements ServiceInterface<Agendamento> {
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
 
     @Autowired
     private EmailSender emailSender;
+   
+    @Override
+    public Agendamento create(Agendamento agendamento) {
+        emailSender.enviarEmailConfirmacao(agendamento);
+        emailSender.enviarEmailConfirmacaoAdmin(agendamento);
+        return agendamentoRepository.save(agendamento);
+    }
 
-    public List<Agendamento> getAllAgendamentos() {
+    @Override
+    public Optional<Agendamento> findById(Long id) {
+        Optional<Agendamento> agendamento = agendamentoRepository.findById(id);
+        return agendamento;
+    }
 
+    @Override
+    public List<Agendamento> findAll() {
         List<Agendamento> agendamentos = new ArrayList<>();
         agendamentoRepository.findAll().forEach(agendamentos::add);
 
         return agendamentos;
     }
 
-    public Optional<Agendamento> getAgendamento(Long id) {
-        return agendamentoRepository.findById(id);
+    @Override
+    public boolean update(Agendamento obj) {
+        if (agendamentoRepository.existsById(obj.getId())) {
+            agendamentoRepository.save(obj);
+            return true;
+        }
+        return false;
     }
 
-    public Agendamento addAgendamento(Agendamento agendamento) {
-        emailSender.enviarEmailConfirmacao(agendamento);
-        emailSender.enviarEmailConfirmacaoAdmin(agendamento);
-        return agendamentoRepository.save(agendamento);
-    }
-
-    public void updateAgendamento(String id, Agendamento agendamento) {
-        agendamentoRepository.save(agendamento);
-    }
-
-    public void deleteAgendamento(Long id) {
-        agendamentoRepository.deleteById(id);
+    @Override
+    public boolean delete(Long id) {
+        if (agendamentoRepository.existsById(id)) {
+            agendamentoRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
