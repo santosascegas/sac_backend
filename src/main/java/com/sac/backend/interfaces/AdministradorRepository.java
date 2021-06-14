@@ -1,9 +1,8 @@
 package com.sac.backend.interfaces;
 
-import com.sac.backend.models.AdministradorModel;
-import org.springframework.data.repository.CrudRepository;
+import com.sac.backend.models.Administrador;
 
-public interface AdministradorRepository extends CrudRepository<AdministradorModel, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface AdministradorRepository extends JpaRepository<Administrador, Long> {
 
-    AdministradorModel findByLogin(String login);
 }

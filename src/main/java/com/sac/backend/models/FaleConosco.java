@@ -1,15 +1,15 @@
 package com.sac.backend.models;
 
-public class FaleConoscoModel {
+public class FaleConosco {
     private String nome;
     private String email;
     private String telefone;
     private String assunto;
     private String mensagem;
 
-    public FaleConoscoModel() {}
+    public FaleConosco() {}
 
-    public FaleConoscoModel(String nome, String email, String telefone, String assunto, String mensagem) {
+    public FaleConosco(String nome, String email, String telefone, String assunto, String mensagem) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;

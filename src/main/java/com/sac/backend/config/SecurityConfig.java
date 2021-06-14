@@ -1,6 +1,6 @@
 package com.sac.backend.config;
 
-import com.sac.backend.interfaces.AdministradorRepository;
+import com.sac.backend.interfaces.UsuarioRepository;
 import com.sac.backend.security.JWTAuthenticationFilter;
 import com.sac.backend.security.JWTAuthorizationFilter;
 import com.sac.backend.security.JWTUtil;
@@ -24,10 +24,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    // private static final String[] PUBLIC_MATCHERS = { "/login/**" };
     private static final String[] PUBLIC_MATCHERS = { "/**" };
 
-    // private static final String[] PUBLIC_MATCHERS_POST = { "/administrador/**" };
     private static final String[] PUBLIC_MATCHERS_POST = { "/**" };
     private static final String[] PUBLIC_MATCHERS_DELETE = { "/**" };
 
@@ -38,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService uds;
 
     @Autowired
-    private AdministradorRepository adminrepo;
+    private UsuarioRepository usuarioRepo;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -47,10 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS).permitAll()
                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-                .antMatchers(HttpMethod.DELETE, PUBLIC_MATCHERS_DELETE).permitAll()
                 .anyRequest().authenticated();
-        http.addFilter(new JWTAuthenticationFilter(
-                authenticationManager(), jwtUtil, adminrepo));
+        http.addFilter(jwtAuthorizationFilter());
         http.addFilter(new JWTAuthorizationFilter(authenticationManager(),
                 jwtUtil, userDetailsService()));
     }
@@ -72,5 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    public JWTAuthenticationFilter jwtAuthorizationFilter() throws Exception {
+        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(authenticationManager(), jwtUtil, usuarioRepo);
+        jwtAuthenticationFilter.setFilterProcessesUrl("/admin/login");
+        return jwtAuthenticationFilter;
     }
 }

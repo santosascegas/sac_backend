@@ -1,7 +1,5 @@
 package com.sac.backend.models;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "agendamento")
-public class AgendamentoModel {
+@Table(name = "tb_agendamento")
+public class Agendamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +32,7 @@ public class AgendamentoModel {
     @Column(name = "tp_atestado")
     private int atestado;
 
-    public AgendamentoModel(Long id, String dt, String nomeUsuario, String emailUsuario, String documento,
+    public Agendamento(Long id, String dt, String nomeUsuario, String emailUsuario, String documento,
             String telefone, int atestado) {
         this.id = id;
         this.dt = dt;
@@ -45,7 +43,7 @@ public class AgendamentoModel {
         this.atestado = atestado;
     }
 
-    public AgendamentoModel() {
+    public Agendamento() {
     }
 
     public Long getId() {

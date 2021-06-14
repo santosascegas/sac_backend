@@ -6,12 +6,11 @@ import java.io.IOException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import com.sac.backend.models.AgendamentoModel;
-import com.sac.backend.models.FaleConoscoModel;
+import com.sac.backend.models.Agendamento;
+import com.sac.backend.models.FaleConosco;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ public class EmailSender {
     @Value("${email.admin}")
     private String emailAdmin;
 
-    public void enviarEmailConfirmacao(AgendamentoModel agendamentoModel) {
+    public void enviarEmailConfirmacao(Agendamento agendamentoModel) {
         try {
             MimeMessage msg = javaMailSender.createMimeMessage();
 
@@ -65,7 +64,7 @@ public class EmailSender {
         }
     }
 
-    public void enviarEmailConfirmacaoAdmin(AgendamentoModel agendamentoModel) {
+    public void enviarEmailConfirmacaoAdmin(Agendamento agendamentoModel) {
         try {
             MimeMessage msg = javaMailSender.createMimeMessage();
 
@@ -105,7 +104,7 @@ public class EmailSender {
         }
     }
 
-    public Boolean enviarEmailFaleConosco(FaleConoscoModel faleConosco){
+    public Boolean enviarEmailFaleConosco(FaleConosco faleConosco){
         try {
             MimeMessage msg = javaMailSender.createMimeMessage();
 

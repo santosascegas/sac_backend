@@ -1,7 +1,7 @@
 package com.sac.backend.controllers;
 
 import com.sac.backend.interfaces.Control;
-import com.sac.backend.models.DatasModel;
+import com.sac.backend.models.Datas;
 import com.sac.backend.services.DatasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/datas")
 
-public class DatasController implements Control<DatasModel> {
+public class DatasController implements Control<Datas> {
 
     @Autowired
     private DatasService datasService;
@@ -33,27 +33,27 @@ public class DatasController implements Control<DatasModel> {
 
     @Override
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<DatasModel>> getAll() {
+    public ResponseEntity<List<Datas>> getAll() {
         return ResponseEntity.ok(datasService.findAll());
     }
 
     @Override
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        DatasModel _datasModel = datasService.findById(id);
+        Datas _datasModel = datasService.findById(id);
         return _datasModel != null ? ResponseEntity.ok(_datasModel) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @Override
     @PostMapping
-    public ResponseEntity post(@RequestBody DatasModel datasModel) {
+    public ResponseEntity post(@RequestBody Datas datasModel) {
         return ResponseEntity.ok(datasService.create(datasModel));
     }
 
     @Override
     @PutMapping
-    public ResponseEntity<?> put(@RequestBody DatasModel datasModel) {
+    public ResponseEntity<?> put(@RequestBody Datas datasModel) {
         return datasService.update(datasModel) ? ResponseEntity.ok(datasModel) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
@@ -63,4 +63,5 @@ public class DatasController implements Control<DatasModel> {
         // TODO Auto-generated method stub
         return null;
     }
+
 }

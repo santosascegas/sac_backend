@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sac.backend.security.JWTUtil;
 import com.sac.backend.security.UserDetailsImpl;
-import com.sac.backend.services.AdministradorService;
+import com.sac.backend.services.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class AuthController {
     @PostMapping(value = "/refresh_token")
     public ResponseEntity<Void> refreshToken(
         HttpServletResponse response) {
-        UserDetailsImpl user = AdministradorService.authenticated();
+        UserDetailsImpl user = UsuarioService.authenticated();
         
         if (user != null) {
             String token = jwtUtil.generateToken(user.getUsername());

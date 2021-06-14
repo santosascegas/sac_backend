@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import java.util.Date;
 
 /**
  * @author Maurício Freire
@@ -15,8 +14,8 @@ import java.util.Date;
  * Created on IntelliJ IDEA
  */
 @Entity
-@Table(name = "datas_disponiveis")
-public class DatasModel {
+@Table(name = "tb_datas")
+public class Datas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +24,9 @@ public class DatasModel {
     @Column(name = "data")
     private String data;
 
-    public DatasModel() {}
+    public Datas() {}
 
-    public DatasModel(Long id, String data) {
+    public Datas(Long id, String data) {
         this.id = id;
         this.data = data;
     }

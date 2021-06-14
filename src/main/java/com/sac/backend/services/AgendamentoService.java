@@ -1,15 +1,12 @@
 package com.sac.backend.services;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.mail.MessagingException;
-
 import com.sac.backend.helpers.EmailSender;
 import com.sac.backend.interfaces.AgendamentoRepository;
-import com.sac.backend.models.AgendamentoModel;
+import com.sac.backend.models.Agendamento;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,25 +20,25 @@ public class AgendamentoService {
     @Autowired
     private EmailSender emailSender;
 
-    public List getAllAgendamentos() {
+    public List<Agendamento> getAllAgendamentos() {
 
-        List agendamentos = new ArrayList<>();
+        List<Agendamento> agendamentos = new ArrayList<>();
         agendamentoRepository.findAll().forEach(agendamentos::add);
 
         return agendamentos;
     }
 
-    public Optional<AgendamentoModel> getAgendamento(Long id) {
+    public Optional<Agendamento> getAgendamento(Long id) {
         return agendamentoRepository.findById(id);
     }
 
-    public AgendamentoModel addAgendamento(AgendamentoModel agendamento) {
+    public Agendamento addAgendamento(Agendamento agendamento) {
         emailSender.enviarEmailConfirmacao(agendamento);
         emailSender.enviarEmailConfirmacaoAdmin(agendamento);
         return agendamentoRepository.save(agendamento);
     }
 
-    public void updateAgendamento(String id, AgendamentoModel agendamento) {
+    public void updateAgendamento(String id, Agendamento agendamento) {
         agendamentoRepository.save(agendamento);
     }
 

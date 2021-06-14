@@ -2,7 +2,7 @@ package com.sac.backend.controllers;
 
 import com.sac.backend.exception.AuthorizedException;
 import com.sac.backend.interfaces.Control;
-import com.sac.backend.models.AdministradorModel;
+import com.sac.backend.models.Administrador;
 import com.sac.backend.services.AdministradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,22 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/login")
-public class AdministradorController implements Control<AdministradorModel> {
+@RequestMapping("/admin")
+public class AdministradorController implements Control<Administrador> {
 
     @Autowired
     private AdministradorService administradorService;
 
+    @GetMapping(value="/")
     @Override
-    @DeleteMapping(value = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        return administradorService.delete(id) ? ResponseEntity.ok().build() :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    @Override
-    public ResponseEntity<List<AdministradorModel>> getAll() {
+    public ResponseEntity<List<Administrador>> getAll() {
         return ResponseEntity.ok(administradorService.findAll());
     }
 
@@ -43,7 +36,7 @@ public class AdministradorController implements Control<AdministradorModel> {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         try {
-            AdministradorModel _admin = administradorService.findById(id);
+            Administrador _admin = administradorService.findById(id);
             return _admin != null ? ResponseEntity.ok(_admin) :
                     ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (AuthorizedException e) {
@@ -53,16 +46,24 @@ public class AdministradorController implements Control<AdministradorModel> {
 
     @Override
     @PostMapping
-    public ResponseEntity<AdministradorModel> post(@RequestBody
-                AdministradorModel administradorModel) {
-        return ResponseEntity.ok(administradorService.create(administradorModel));
+    public ResponseEntity<Administrador> post(@RequestBody
+                Administrador administrador) {
+        return ResponseEntity.ok(administradorService.create(administrador));
     }
 
     @Override
     @PutMapping
-    public ResponseEntity<?> put(@RequestBody AdministradorModel administradorModel) {
-        return administradorService.update(administradorModel) ? ResponseEntity
-                .ok(administradorModel) : ResponseEntity.status(HttpStatus.NOT_FOUND)
+    public ResponseEntity<?> put(@RequestBody Administrador administrador) {
+        return administradorService.update(administrador) ? ResponseEntity
+                .ok(administrador) : ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .build();
+    }
+
+    @Override
+    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        return administradorService.delete(id) ? ResponseEntity.ok().build() :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
