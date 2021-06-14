@@ -1,7 +1,7 @@
 package com.sac.backend.controllers;
 
 
-import com.sac.backend.models.FaleConoscoModel;
+import com.sac.backend.models.FaleConosco;
 import com.sac.backend.services.FaleConoscoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class FaleConoscoController {
     private FaleConoscoService faleConoscoService;
     
     @PostMapping(value = "/", produces = "application/json")
-    public ResponseEntity<?> sendFaleConosco(@RequestBody FaleConoscoModel faleConosco) {
+    public ResponseEntity<?> sendFaleConosco(@RequestBody FaleConosco faleConosco) {
         return faleConoscoService.sendFaleConosco(faleConosco) 
             ? ResponseEntity.status(200).build() : ResponseEntity.status(500).build();
     }

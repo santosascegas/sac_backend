@@ -3,8 +3,8 @@ package com.sac.backend.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.sac.backend.DTO.CredencialDTO;
-import com.sac.backend.interfaces.AdministradorRepository;
-import com.sac.backend.models.AdministradorModel;
+import com.sac.backend.interfaces.UsuarioRepository;
+import com.sac.backend.models.Usuario;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,13 +24,13 @@ import java.util.Date;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authMan;
     private JWTUtil jwtUtil;
-    private AdministradorRepository admRepo;
+    private UsuarioRepository usuarioRepo;
 
     public JWTAuthenticationFilter(AuthenticationManager authMan,
-               JWTUtil jwtUtil, AdministradorRepository admrepo) {
+               JWTUtil jwtUtil, UsuarioRepository usuarioRepo) {
         this.authMan = authMan;
         this.jwtUtil = jwtUtil;
-        this.admRepo = admrepo;
+        this.usuarioRepo = usuarioRepo;
     }
 
     @Override
@@ -44,7 +44,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     UsernamePasswordAuthenticationToken(cdto.getLogin(),
                     cdto.getSenha(), new ArrayList<>());
 
-            return authMan.authenticate(authToken);
+            Authentication auth = authMan.authenticate(authToken);
+            return auth;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,12 +63,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         
         response.addHeader("access-control-expose-headers", "Authorization");
         
-        AdministradorModel adm = admRepo.findByLogin(username);
+        Usuario usuario = usuarioRepo.findByLogin(username);
         
-        adm.setSenha(null);
+        usuario.setSenha(null);
         
         Gson gson = new Gson();
-        String cliStr = gson.toJson(adm);
+        String cliStr = gson.toJson(usuario);
         
         PrintWriter out = response.getWriter();
         

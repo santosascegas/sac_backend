@@ -13,9 +13,9 @@ import java.util.List;
 
 @Repository
 public interface Control<K> {
-    ResponseEntity<?> delete(Long id);
     ResponseEntity<List<K>> getAll();
     ResponseEntity<?> getById(Long id);
     ResponseEntity<K> post(K obj);
     ResponseEntity<?> put(K obj);
+    ResponseEntity<?> delete(Long id);
 }
