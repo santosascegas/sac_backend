@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("ALL")
 @RestController
 @RequestMapping(value = "/datas")
 
@@ -29,7 +27,7 @@ public class DatasController implements Control<Datas> {
     private DatasService datasService;
 
     @Override
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+    @GetMapping(value = "/")
     public ResponseEntity<List<Datas>> getAll() {
         return ResponseEntity.ok(datasService.findAll());
     }

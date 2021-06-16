@@ -1,14 +1,9 @@
 package com.sac.backend.helpers;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import com.sac.backend.models.Agendamento;
-import com.sac.backend.models.FaleConosco;
-import com.sac.backend.services.DatasService;
+import com.sac.backend.DTO.FaleConoscoDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,20 +34,31 @@ public class EmailSender {
             String dia = data[0];
             String horario = data[1];
 
-
             String body = "<h2>Santos às Cegas</h2>"
-                        + "<h4>" + agendamentoModel.getNomeUsuario() + ", o seu agendamento está confirmado!</h4>"
-                        + "<p><strong>Dia:</strong> " + dia + "</p>"
-                        + "<p><strong>Horario:</strong> " + horario + "</p>"
+                        + "<h4>Olá " + agendamentoModel.getNomeUsuario() + "!! Estamos entrando em contato para informar que seu agendamento foi realizado com sucesso!</h4>"
+                        + "<p><strong>Data do trajeto:</strong> " + dia + "</p>"
+                        + "<p><strong>Horário:</strong> " + horario + "</p>"
                         + "<br />";
             
             if (agendamentoModel.getAtestado() == 1) 
                 body = body 
-                    + "<p>Por favor, apresentar atestado médico no dia de seu trajeto.</p>"
+                    + "<p>Por favor, não se esqueça de apresentar seu atestado médico no dia do seu trajeto.</p>"
                     + "<br />";
 
             body = body 
-                + "<h4>Muito obrigado e qualquer dúvida entre em contato conosco!</h4>";
+                + "<p>Temos algumas dicas para melhorar ainda mais a sua experiência durante o trajeto!</p>"
+                + "<br />"
+                + "<p>O ponto de encontro:</p>"
+                + "<p>Canal 1 (Senador Pinheiro Machado) com a praia, ao lado dos quiosques.</p>"
+                + "<br />"
+                + "<p>Em caso de chuva no dia do trajeto, observaremos a situação da chuva, entraremos em contato com você para remarcar o trajeto ou não. No caso de chuva ao longo do trajeto, faremos uma parada em um local alternativo.</p>"
+                + "<br />"
+                + "<p>Para essa e outras informações visite nossa página de dúvidas frequentes em nosso site:</p>"
+                + "<a href='http://localhost:3000/faq'>Dúvidas Frequentes</a>"
+                + "<br />"
+                + "<br />"
+                + "<p>Atenciosamente,</p>"
+                + "<strong>Equipe Santos às cegas</strong>";
         
 
             helper.setSubject("Confirmação agendamento - " + agendamentoModel.getDocumento());
@@ -87,7 +93,7 @@ public class EmailSender {
                         + "<p><strong>Documento:</strong> " + agendamentoModel.getDocumento() + "</p>"
                         + "<p><strong>Email:</strong> " + agendamentoModel.getEmailUsuario() + "</p>"
                         + "<p><strong>Dia:</strong> " + dia + "</p>"
-                        + "<p><strong>Horario:</strong> " + horario + "</p>"
+                        + "<p><strong>Horário:</strong> " + horario + "</p>"
                         + "<br />";
             
             if (agendamentoModel.getAtestado() == 1) 
@@ -105,7 +111,7 @@ public class EmailSender {
         }
     }
 
-    public Boolean enviarEmailFaleConosco(FaleConosco faleConosco){
+    public Boolean enviarEmailFaleConosco(FaleConoscoDTO faleConosco){
         try {
             MimeMessage msg = javaMailSender.createMimeMessage();
 
@@ -116,13 +122,13 @@ public class EmailSender {
 
             String body = "<h3>Email de Contato Recebido do Site Santos às Cegas</h3>"
                         + "<p><strong>Nome:</strong> " + faleConosco.getNome() + "</p>"
+                        + "<p><strong>Email:</strong> " + faleConosco.getEmail() + "</p>"
                         + "<p><strong>Telefone:</strong> " + faleConosco.getTelefone() + "</p>"
                         + "<p><strong>Assunto:</strong> " + faleConosco.getAssunto() + "</p>"
                         + "<p><strong>Mensagem:</strong> " + faleConosco.getMensagem() + "</p>";
                         
             helper.setSubject("Fale Conosco Santos as Cegas - " + faleConosco.getAssunto());
             helper.setText(body, true);
-            // helper.addInline("logo", new File("~/Documents/sac_frontend/public/images/logo-principal.png"));
 
             javaMailSender.send(msg);
             return true;
