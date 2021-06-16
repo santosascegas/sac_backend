@@ -24,11 +24,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    // private static final String[] PUBLIC_MATCHERS = { "/datas/" };
-    private static final String[] PUBLIC_MATCHERS = { "/**" };
-
-    private static final String[] PUBLIC_MATCHERS_POST = { "/**" };
-    // private static final String[] PUBLIC_MATCHERS_POST = { "/agendamento/", "/admin/**" };
+    private static final String[] PUBLIC_MATCHERS = { "/datas/status" };
+    private static final String[] PUBLIC_MATCHERS_POST = { 
+        "/agendamento/",
+        "/fale-conosco/"
+    };
 
     @Autowired
     private JWTUtil jwtUtil;
