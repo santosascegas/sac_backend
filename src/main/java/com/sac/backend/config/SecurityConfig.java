@@ -1,5 +1,7 @@
 package com.sac.backend.config;
 
+import java.util.Arrays;
+
 import com.sac.backend.interfaces.UsuarioRepository;
 import com.sac.backend.security.JWTAuthenticationFilter;
 import com.sac.backend.security.JWTAuthorizationFilter;
@@ -62,8 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         final UrlBasedCorsConfigurationSource source = new
                 UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedMethod(HttpMethod.DELETE);
-        config.addAllowedMethod(HttpMethod.PUT);
+        String[] methods = {"GET", "POST", "PUT", "DELETE"};   
+        config.setAllowedMethods(Arrays.asList(methods));
         config.applyPermitDefaultValues();
         source.registerCorsConfiguration("/**", config);
         return source;
