@@ -31,7 +31,7 @@ public class AgendamentoController implements Control<Agendamento> {
     public ResponseEntity<List<Agendamento>> getAll() {
         return ResponseEntity.ok(agendamentoService.findAll());
     }
-
+  
     @GetMapping(value = "/{id}")
     public ResponseEntity<Optional<Agendamento>> getById(@PathVariable Long id) {
         Optional<Agendamento> _agendamento = agendamentoService.findById(id);
