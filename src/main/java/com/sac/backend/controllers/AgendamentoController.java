@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,11 +26,13 @@ public class AgendamentoController implements Control<Agendamento> {
     @Autowired
     private AgendamentoService agendamentoService;
 
+    @Override
     @GetMapping(value = "/")
     public ResponseEntity<List<Agendamento>> getAll() {
         return ResponseEntity.ok(agendamentoService.findAll());
     }
   
+    @Override
     @GetMapping(value = "/{id}")
     public ResponseEntity<Optional<Agendamento>> getById(@PathVariable Long id) {
         Optional<Agendamento> _agendamento = agendamentoService.findById(id);
@@ -39,11 +40,13 @@ public class AgendamentoController implements Control<Agendamento> {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @Override
     @PostMapping(value = "/")
     public ResponseEntity<Agendamento> post(@RequestBody Agendamento agendamento) {
         return ResponseEntity.ok(agendamentoService.create(agendamento));
     }
 
+    @Override
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> put(@RequestBody Agendamento agendamento) {
         return agendamentoService.update(agendamento) ? ResponseEntity
@@ -51,10 +54,10 @@ public class AgendamentoController implements Control<Agendamento> {
                 .build();
     }
 
+    @Override
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return agendamentoService.delete(id) ? ResponseEntity.ok().build() :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 }
