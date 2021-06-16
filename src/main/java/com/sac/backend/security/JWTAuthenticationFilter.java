@@ -61,7 +61,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         
         response.addHeader("Authentication", "Bearer " + token);
         
-        response.addHeader("access-control-expose-headers", "Authorization");
+        response.addHeader("access-control-expose-headers", "Authentication");
         
         Usuario usuario = usuarioRepo.findByLogin(username);
         
