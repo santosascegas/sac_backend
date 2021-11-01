@@ -1,5 +1,7 @@
 package com.sac.backend.config;
 
+import java.util.Arrays;
+
 import com.sac.backend.interfaces.UsuarioRepository;
 import com.sac.backend.security.JWTAuthenticationFilter;
 import com.sac.backend.security.JWTAuthorizationFilter;
@@ -24,11 +26,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    // private static final String[] PUBLIC_MATCHERS = { "/datas/" };
-    private static final String[] PUBLIC_MATCHERS = { "/**" };
-
-    private static final String[] PUBLIC_MATCHERS_POST = { "/**" };
-    // private static final String[] PUBLIC_MATCHERS_POST = { "/agendamento/", "/admin/**" };
+    private static final String[] PUBLIC_MATCHERS = { "/datas/status" };
+    private static final String[] PUBLIC_MATCHERS_POST = { 
+        "/agendamento/",
+        "/fale-conosco/"
+    };
 
     @Autowired
     private JWTUtil jwtUtil;
@@ -61,8 +63,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new
                 UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration()
-            .applyPermitDefaultValues());
+        CorsConfiguration config = new CorsConfiguration();
+        String[] methods = {"GET", "POST", "PUT", "DELETE"};   
+        config.setAllowedMethods(Arrays.asList(methods));
+        config.applyPermitDefaultValues();
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

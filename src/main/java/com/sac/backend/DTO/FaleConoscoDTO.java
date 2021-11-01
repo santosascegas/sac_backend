@@ -1,15 +1,15 @@
-package com.sac.backend.models;
+package com.sac.backend.DTO;
 
-public class FaleConoscoModel {
+public class FaleConoscoDTO {
     private String nome;
     private String email;
     private String telefone;
     private String assunto;
     private String mensagem;
 
-    public FaleConoscoModel() {}
+    public FaleConoscoDTO() {}
 
-    public FaleConoscoModel(String nome, String email, String telefone, String assunto, String mensagem) {
+    public FaleConoscoDTO(String nome, String email, String telefone, String assunto, String mensagem) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;

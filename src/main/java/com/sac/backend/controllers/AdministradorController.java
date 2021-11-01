@@ -25,8 +25,8 @@ public class AdministradorController implements Control<Administrador> {
     @Autowired
     private AdministradorService administradorService;
 
-    @GetMapping(value="/")
     @Override
+    @GetMapping(value="/")
     public ResponseEntity<List<Administrador>> getAll() {
         return ResponseEntity.ok(administradorService.findAll());
     }
