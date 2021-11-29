@@ -116,10 +116,15 @@ public class BackendTeste {
     public void salvarAgendamentoPasseio() {
         Agendamento agendamento = new Agendamento(1L, "João Silva", "jsilva@gmail.com",
                 "55.184.332-5", "99121473", 0);
-        Datas datas = agendamento.getData();
-        datas.setStatus(1);
-        datasService.update(datas);
-        assertEquals(1, datasService.findById(datas.getId()).get().getStatus());
+        Optional<Datas> optional = datasService.findById(16L);
+        Datas datas = optional.get();
+        if (optional.isPresent()) {
+            assertEquals(0, datas.getStatus());
+            datas.setStatus(1);
+            datasService.update(datas);
+            agendamento.setData(optional.get());
+        }
+        assertEquals(1, datas.getStatus());
         assertTrue(agendamentoService.create(agendamento) instanceof Agendamento);
     }
     
