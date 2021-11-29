@@ -19,6 +19,8 @@
 -- Table structure for table `agendamento`
 --
 
+use nshlz4k4t661ae0k;
+
 DROP TABLE IF EXISTS `agendamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
