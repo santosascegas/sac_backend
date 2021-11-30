@@ -29,7 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] PUBLIC_MATCHERS = { "/datas/status" };
     private static final String[] PUBLIC_MATCHERS_POST = { 
         "/agendamento/",
-        "/fale-conosco/"
+        "/fale-conosco/",
+        "/admin/"
     };
 
     @Autowired
