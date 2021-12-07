@@ -3,6 +3,7 @@ package com.sac.backend;
 import com.sac.backend.DTO.FaleConoscoDTO;
 import com.sac.backend.helpers.EmailSender;
 import com.sac.backend.interfaces.AgendamentoRepository;
+import com.sac.backend.interfaces.DatasRepository;
 import com.sac.backend.models.Agendamento;
 import com.sac.backend.models.Datas;
 import com.sac.backend.services.AgendamentoService;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,6 +36,9 @@ public class BackendTeste {
     DatasService datasService;
     
     @Autowired
+    DatasRepository datasRepository;
+    
+    @Autowired
     EmailSender emailSender;
     
     @Autowired
@@ -44,7 +49,7 @@ public class BackendTeste {
     
     @Test
     public void salvarDataPasseio() {
-        Datas datas = new Datas(1L, "30/10/2021", 0);
+        Datas datas = new Datas(1L, "07/12/2021", 0);
         assertAll(() -> assertNotNull(datas.getId(), "O id não deve ser nulo."),
                 () -> assertNotNull(datas.getData(), "A data não deve ser nula."),
                 () -> assertTrue(datas.getStatus() >= 0 && datas.getStatus() <= 1,
@@ -56,10 +61,9 @@ public class BackendTeste {
     
     @Test
     public void procurarData() {
-        datasService.create(new Datas(1L, "01/11/2021", 0));
-        Optional<Datas> datas = datasService.findById(1L);
-        
-        assertNotNull(datas.get().getId(), "O id não foi encontrado.");
+        datasRepository.save(new Datas(1L, "07/12/2021", 0));
+        Optional<Datas> datas = datasService.findById(28L);
+        assertNotNull(datas.get(), "O id não foi encontrado.");
     }
     
     @Test
@@ -71,9 +75,11 @@ public class BackendTeste {
     
     @Test
     public void atualizarDatas() {
-        Datas datas = new Datas(1L, "01/11/2021", 0);
-        datasService.create(datas);
-        Optional<Datas> atualizacao = datasService.findById(1L);
+        double r = Math.random() * 30;
+        long rand = (long) (r + 1);
+        
+        Optional<Datas> atualizacao = datasService.findById(rand);
+        atualizacao.ifPresent(value -> assertNotEquals(1, value.getStatus()));
         atualizacao.ifPresent(value -> value.setStatus(1));
         assertAll("Atualização",
                 () -> assertNotNull(atualizacao.get(), "Registro não encontrado."),
@@ -83,8 +89,10 @@ public class BackendTeste {
     
     @Test
     public void deletarDatas() {
-        datasService.create(new Datas(1L, "26/10/2021", 0));
-        Optional<Datas> datas = datasService.findById(1L);
+        double r = Math.random() * 30;
+        long rand = (long) (r + 1);
+        System.out.println("-->> " + rand);
+        Optional<Datas> datas = datasService.findById(12L);
         assertAll("Deletar", () -> assertTrue(datas.isPresent(), "Não presente."),
                 () -> assertTrue(datasService.delete(datas.get().getId()),
                         "A data não foi deletada."));
@@ -92,16 +100,10 @@ public class BackendTeste {
     
     @Test
     public void listarDatasPorStatus() {
-        Datas data1 = new Datas(1L, "26/10/2021", 0);
-        Datas data2 = new Datas(2L, "27/10/2021", 1);
-        Datas data3 = new Datas(3L, "28/10/2021", 0);
-        datasService.create(data1);
-        datasService.create(data2);
-        datasService.create(data3);
-        List<Datas> base = Arrays.asList(data1, data3);
         List<Datas> datas = datasService.listarPorStatus();
-        for (int i = 0; i < datas.size(); i++)
-            assertSame(base.get(i).getId(), datas.get(i).getId());
+        System.out.println("LISTA " + datas.size());
+        for (Datas d : datas)
+            assertSame(0, d.getStatus());
     }
     
     @Test
@@ -114,26 +116,28 @@ public class BackendTeste {
     
     @Test
     public void salvarAgendamentoPasseio() {
-        Agendamento agendamento = new Agendamento(1L, "João Silva", "jsilva@gmail.com",
-                "55.184.332-5", "99121473", 0);
-        Optional<Datas> optional = datasService.findById(16L);
+        Agendamento agendamento = new Agendamento(1L, "Urubutre",
+                "urubutre@gmail.com", "42.000.352-1", "99066293", 1);
+        double r = Math.random() * 27;
+        long rand = (long) (r + 1);
+        Optional<Datas> optional = datasService.findById(rand);
         Datas datas = optional.get();
         if (optional.isPresent()) {
-            assertEquals(0, datas.getStatus());
+            assertEquals(0, datas.getStatus(), "Data já agendada.");
             datas.setStatus(1);
             datasService.update(datas);
             agendamento.setData(optional.get());
         }
         assertEquals(1, datas.getStatus());
-        assertTrue(agendamentoService.create(agendamento) instanceof Agendamento);
+        assertTrue(agendamentoRepository.save(agendamento) instanceof Agendamento);
     }
     
     @Test
     public void encontrarAgendamentoPorId() {
-        agendamentoRepository.save(new Agendamento(1L, "João Silva",
-                "jsilva@gmail.com", "55.184.332-5", "99121473", 0));
-        Optional<Agendamento> agendamento = agendamentoService.findById(1L);
-        assertNotNull(agendamento.get().getId(), "Agendamento nao encontrado.");
+        long rand = (long) (Math.random() * (24 - 15) + 15);
+        Optional<Agendamento> agendamento = agendamentoService.findById(rand);
+        System.out.println("ID = " + rand + "\nagendamento: " + agendamento.get().getNomeUsuario());
+        assertNotNull(agendamento, "Agendamento nao encontrado.");
     }
     
     @Test
