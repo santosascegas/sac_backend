@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Novo Agendamento Realizado</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <h2>Santos às Cegas</h2>
+    <h4>Um novo agendamento foi realizado!</h4>
+    <p><strong>Nome:</strong> <span th:text="${name}"></span></p>
+    <p><strong>Telefone:</strong> <span th:text="${phone}"></span></p>
+    <p><strong>Documento:</strong> <span th:text="${idDocument}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${email}"></span></p>
+    <p><strong>Dia:</strong> <span th:text="${date}"></span></p>
+    <p><strong>Horário:</strong> <span th:text="${hour}"></span></p>
+    <br>
+
+    <span th:if="${doctorsNote}">
+        <p>
+            Deverá apresentar atestado médico.
+            <br>
+        </p>
+    </span>
+</body>
+</html>

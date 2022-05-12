@@ -5,12 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author Maurício Freire
- * Date 04/06/2021 at 23:26
- * Created on IntelliJ IDEA
- */
-
 @Repository
 public interface Control<K> {
     ResponseEntity<List<K>> getAll();

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Contato Santos às Cegas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <h3>Email de Contato Recebido do Site Santos às Cegas</h3>
+    <p><strong>Nome:</strong> <span th:text="${name}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${email}"></span></p>
+    <p><strong>Telefone:</strong> <span th:text="${phone}"></span></p>
+    <p><strong>Assunto:</strong> <span th:text="${subject}"></span></p>
+    <p><strong>Mensagem:</strong> <span th:text="${message}"></span></p>
+    <br>
+</body>
+</html>
