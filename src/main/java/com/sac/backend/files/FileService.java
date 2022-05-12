@@ -79,16 +79,12 @@ public class FileService {
 
     public void save(MultipartFile file) {
         try {
-            if (file.getOriginalFilename().isBlank()) {
-                throw new RuntimeException();
-            } else {
-                String fileName = new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
-                FileStorage f = new FileStorage();
-                Files.copy(file.getInputStream(), this.root.resolve(fileName));
-                f.setFileName(fileName);
-                f.setPath(this.root.resolve(fileName).toString());
-                fileRepository.save(f);
-            }
+            String fileName = new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
+            FileStorage f = new FileStorage();
+            Files.copy(file.getInputStream(), this.root.resolve(fileName));
+            f.setFileName(fileName);
+            f.setPath(this.root.resolve(fileName).toString());
+            fileRepository.save(f);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
