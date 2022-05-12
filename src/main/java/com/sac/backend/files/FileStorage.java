@@ -27,7 +27,6 @@ public class FileStorage {
     @CreationTimestamp
     @Column(updatable = false)
     private Date created_at;
-
     public FileStorage(String fileName, String path) {
         this.fileName = fileName;
         this.path = path;

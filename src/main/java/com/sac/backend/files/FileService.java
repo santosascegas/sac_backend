@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -51,11 +52,13 @@ public class FileService {
 
     public FileStorage generateFS(MultipartFile file) {
         try {
-            String fileName = new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
             FileStorage f = new FileStorage();
-            Files.copy(file.getInputStream(), this.root.resolve(fileName));
-            f.setFileName(fileName);
-            f.setPath(this.root.resolve(fileName).toString());
+            if (!Objects.equals(file.getOriginalFilename(), "")) {
+                String fileName = new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
+                Files.copy(file.getInputStream(), this.root.resolve(fileName));
+                f.setFileName(fileName);
+                f.setPath(this.root.resolve(fileName).toString());
+            }
             return f;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -76,12 +79,17 @@ public class FileService {
 
     public void save(MultipartFile file) {
         try {
-            String fileName = new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
-            FileStorage f = new FileStorage();
-            Files.copy(file.getInputStream(), this.root.resolve(fileName));
-            f.setFileName(fileName);
-            f.setPath(this.root.resolve(fileName).toString());
-            fileRepository.save(f);
+            if (file.getOriginalFilename().isBlank()) {
+                throw new RuntimeException();
+            } else {
+                String fileName = new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
+                FileStorage f = new FileStorage();
+                Files.copy(file.getInputStream(), this.root.resolve(fileName));
+                f.setFileName(fileName);
+                f.setPath(this.root.resolve(fileName).toString());
+                fileRepository.save(f);
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
