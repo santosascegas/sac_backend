@@ -81,6 +81,9 @@ public class EmailService {
             Context context = new Context();
             Map<String, Object> properties = new HashMap<>();
             properties.put("name", appointment.getName());
+            properties.put("idDocument", appointment.getIdDocument());
+            properties.put("phone", appointment.getPhone());
+            properties.put("email", appointment.getEmail());
 
             Date date = appointment.getAgenda().getDate();
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo"));
