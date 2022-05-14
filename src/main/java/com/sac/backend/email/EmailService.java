@@ -4,6 +4,7 @@ import com.sac.backend.appointment.Appointment;
 import com.sac.backend.contact.Contact;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,7 +17,12 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +32,7 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
     private final Environment env;
+    private final Scheduler scheduler;
 
     @Value("${spring.mail.username}")
     private String admin_email;
@@ -102,6 +109,31 @@ public class EmailService {
         }
     }
 
+    public void sendRating(String email, String name) throws MessagingException {
+        try {
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+
+            Context context = new Context();
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("name", name);
+            properties.put("link", "http://www.gogole.com/");
+
+            context.setVariables(properties);
+
+            helper.setFrom(admin_email);
+            helper.setTo(email);
+            helper.setSubject("Relate sua experiência - Santos às Cegas");
+            String html = templateEngine.process("clientRatingEmail.html", context);
+            helper.setText(html, true);
+
+            log.info("Sending email to: {} with html body: {}", email, html);
+            emailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void sendContact(Contact contact) throws MessagingException {
         try {
             MimeMessage mimeMessage = emailSender.createMimeMessage();
@@ -128,5 +160,50 @@ public class EmailService {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private LocalDateTime convertToLocalDateTime(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public void scheduleEmail(Appointment appointment) {
+        try {
+            Date appointment_date = appointment.getAgenda().getDate();
+            appointment_date.setTime(appointment_date.getTime() + TimeUnit.HOURS.toMillis(4));
+            ZonedDateTime dateTime = ZonedDateTime.of(convertToLocalDateTime(appointment_date), ZoneId.of("America/Sao_Paulo"));
+            if (dateTime.isBefore(ZonedDateTime.now())) {
+                throw new RuntimeException("dateTime precisa está mais tarde que a hora atual!");
+            }
+
+            JobDetail jobDetail = buildJobDetail(appointment);
+            Trigger trigger = buildJobTrigger(jobDetail, dateTime);
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private JobDetail buildJobDetail(Appointment appointment) {
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.put("email", appointment.getEmail());
+        jobDataMap.put("name", appointment.getName());
+
+        return JobBuilder.newJob(EmailJob.class)
+                .withIdentity(UUID.randomUUID().toString(), "email-jobs")
+                .withDescription("Send Email Job")
+                .usingJobData(jobDataMap)
+                .storeDurably()
+                .build();
+    }
+
+    private Trigger buildJobTrigger(JobDetail jobDetail, ZonedDateTime startAt) {
+        return TriggerBuilder.newTrigger()
+                .forJob(jobDetail)
+                .withIdentity(jobDetail.getKey().getName(), "email-triggers")
+                .withDescription("Send Email Trigger")
+                .startAt(Date.from(startAt.toInstant()))
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionFireNow())
+                .build();
     }
 }

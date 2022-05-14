@@ -21,11 +21,11 @@ public class AppointmentService implements ServiceInterface<Appointment> {
     @Override
     public Appointment create(Appointment obj) {
         Agenda agenda = obj.getAgenda();
-        agenda.setIsAvailable(false);
-        agendaService.update(agenda);
+        agendaService.makeAgendaUnavailable(agenda.getId());
 
         emailService.sendClientAppointmentEmail(obj);
         emailService.sendAdminAppointmentEmail(obj);
+        emailService.scheduleEmail(obj);
 
         return appointmentRepository.save(obj);
     }

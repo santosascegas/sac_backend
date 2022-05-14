@@ -29,7 +29,7 @@ public class AppointmentController implements Control<Appointment> {
     }
 
     @Override
-    @PostMapping(value = "/")
+    @PostMapping(value = "/", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Appointment> post(@RequestBody Appointment obj) {
         return ResponseEntity.ok(appointmentService.create(obj));
     }

@@ -1,8 +1,10 @@
 package com.sac.backend.agenda;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -10,10 +12,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Agenda {
+public class Agenda implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private Boolean isAvailable = true;
 }

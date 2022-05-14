@@ -39,6 +39,16 @@ public class AgendaService implements ServiceInterface<Agenda> {
         return false;
     }
 
+    public boolean makeAgendaUnavailable(Long id) {
+        if (agendaRepository.existsById(id)) {
+            Agenda agenda = agendaRepository.getById(id);
+            agenda.setIsAvailable(false);
+            agendaRepository.save(agenda);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean delete(Long id) {
         if (agendaRepository.existsById(id)) {
