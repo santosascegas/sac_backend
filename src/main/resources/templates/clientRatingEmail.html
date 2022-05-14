@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Conte como foi sua experiência</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <h2>Santos às Cegas</h2>
+    <h4>Olá <span th:text="${name}"></span>!! Estamos muito felizes que tenha participado do trajeto!</h4>
+    <p>Se quiser, pode dar uma <em>passadinha</em> no <em>link</em> a seguir, e relatar a sua experiência com o Santos às Cegas, é bem rapidinho!</p>
+    <p><a href="${link}" alt="Relate sua experiência - Santos às Cegas">Clique aqui</a></p>
+
+    <br>
+    <br>
+    <p>Atenciosamente,</p>
+    <strong>Equipe Santos às cegas</strong>
+</body>
+</html>
