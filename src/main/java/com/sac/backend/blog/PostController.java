@@ -32,17 +32,19 @@ public class PostController {
     @PostMapping(value = "/")
     public ResponseEntity<Post> post(@ModelAttribute PostDTO obj) {
         MultipartFile file = obj.getImage();
+        MultipartFile audio = obj.getAudio();
         Post p = new Post();
         FileStorage f = fileService.generateFS(file);
+        FileStorage a = fileService.generateFS(audio);
 
-        p.setEmail(obj.getEmail());
         p.setMessage(obj.getMessage());
         p.setName(obj.getName());
-        p.setIdDocument(obj.getIdDocument());
         p.setPhone(obj.getPhone());
         p.setImage(f);
+        p.setAudio(a);
+        p.setQuestions(obj.getQuestions());
 
-        return ResponseEntity.ok(postService.create(p, file));
+        return ResponseEntity.ok(postService.create(p, file, audio));
     }
 
     @PutMapping(value = "/{id}")

@@ -8,5 +8,7 @@ public enum FileExtensionEnum {
     PNG,
     JPEG,
     JPG,
-    WEBP
+    WEBP,
+    MP3,
+    MPEG
 }

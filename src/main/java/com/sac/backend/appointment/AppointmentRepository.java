@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    @Query(value = "SELECT * FROM appointment WHERE id_document = ?1", nativeQuery = true)
-    Optional<Appointment> clientExists(String idDocument);
+    @Query(value = "SELECT * FROM appointment WHERE phone = ?1", nativeQuery = true)
+    Optional<Appointment> clientExists(String phone);
 }

@@ -19,8 +19,9 @@ public class PostService {
     private final AppointmentRepository appointmentRepository;
     private final FileService fileService;
 
-    public Post create(Post obj, MultipartFile file) {
-        Optional<Appointment> appointment = appointmentRepository.clientExists(obj.getIdDocument());
+    public Post create(Post obj, MultipartFile file, MultipartFile audio) {
+        System.out.println(audio.getName());
+        Optional<Appointment> appointment = appointmentRepository.clientExists(obj.getPhone());
         if (appointment.isPresent()) {
             obj.setIsActive(true);
         }

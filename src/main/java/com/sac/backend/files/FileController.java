@@ -24,9 +24,9 @@ public class FileController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file){
         try {
-            if (!fileService.acceptedExtension(file.getOriginalFilename())) {
-                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("Tipo de arquivo recusado!");
-            }
+//            if (!fileService.acceptedExtension(file.getOriginalFilename())) {
+//                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("Tipo de arquivo recusado!");
+//            }
             fileService.save(file);
             return ResponseEntity.status(HttpStatus.OK).body("Arquivo armazenado com sucesso!");
         } catch (Exception e) {

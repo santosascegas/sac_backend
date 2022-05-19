@@ -1,13 +1,18 @@
 package com.sac.backend.blog;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.sac.backend.files.FileStorage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Date;
 
 @Entity
@@ -16,6 +21,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,9 +30,6 @@ public class Post {
     private String name;
     @Column(length = 15)
     private String phone;
-    private String email;
-    @Column(length = 20)
-    private String idDocument;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -40,4 +43,11 @@ public class Post {
 
     @OneToOne(cascade = {CascadeType.ALL})
     private FileStorage image;
+    @OneToOne(cascade = {CascadeType.ALL})
+    private FileStorage audio;
+
+    @Column(columnDefinition = "json")
+    @JsonRawValue
+    private String questions;
+
 }

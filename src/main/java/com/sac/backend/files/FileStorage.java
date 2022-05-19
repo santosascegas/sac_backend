@@ -22,13 +22,21 @@ public class FileStorage {
 
     private String fileName;
     private String path;
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     @Column(updatable = false)
     private Date created_at;
+
     public FileStorage(String fileName, String path) {
         this.fileName = fileName;
         this.path = path;
+    }
+
+    public FileStorage(String fileName, String path, String description) {
+        this.fileName = fileName;
+        this.path = path;
+        this.description = description;
     }
 }
