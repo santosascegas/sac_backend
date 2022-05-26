@@ -16,15 +16,10 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final AppointmentRepository appointmentRepository;
-    private final FileService fileService;
 
     public Post create(Post obj, MultipartFile file, MultipartFile audio) {
         System.out.println(audio.getName());
-        Optional<Appointment> appointment = appointmentRepository.clientExists(obj.getPhone());
-        if (appointment.isPresent()) {
-            obj.setIsActive(true);
-        }
+        obj.setIsActive(true);
         postRepository.save(obj);
         return obj;
     }
