@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-import java.sql.Blob;
 
 @Getter
 @Setter
@@ -19,5 +18,6 @@ public class PostDTO implements Serializable {
     private String message;
     private MultipartFile image;
     private MultipartFile audio;
-    private String questions;
+    private Boolean question_1;
+    private Boolean question_2;
 }

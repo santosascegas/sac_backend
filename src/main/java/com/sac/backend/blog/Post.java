@@ -7,12 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.util.Date;
 
 @Entity
@@ -46,8 +42,6 @@ public class Post {
     @OneToOne(cascade = {CascadeType.ALL})
     private FileStorage audio;
 
-    @Column(columnDefinition = "json")
-    @JsonRawValue
-    private String questions;
-
+    private Boolean question_1;
+    private Boolean question_2;
 }

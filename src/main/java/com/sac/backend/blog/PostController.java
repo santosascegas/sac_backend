@@ -42,7 +42,8 @@ public class PostController {
         p.setPhone(obj.getPhone());
         p.setImage(f);
         p.setAudio(a);
-        p.setQuestions(obj.getQuestions());
+        p.setQuestion_1(obj.getQuestion_1());
+        p.setQuestion_2(obj.getQuestion_2());
 
         return ResponseEntity.ok(postService.create(p, file, audio));
     }
