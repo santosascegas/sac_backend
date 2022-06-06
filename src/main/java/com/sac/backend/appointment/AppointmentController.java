@@ -17,6 +17,7 @@ public class AppointmentController implements Control<Appointment> {
     private final AppointmentService appointmentService;
 
     @Override
+    @GetMapping(value = "/")
     public ResponseEntity<List<Appointment>> getAll() {
         return ResponseEntity.ok(appointmentService.findAll());
     }

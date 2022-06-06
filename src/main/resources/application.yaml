@@ -9,12 +9,12 @@ uploads:
 
 spring:
   datasource:
-    password: admin
+    password: root
     url: jdbc:mysql://localhost:3306/sacdb
     username: root
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
