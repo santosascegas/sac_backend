@@ -13,6 +13,6 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 public interface AgendaRepository extends JpaRepository<Agenda, Long> {
-    @Query(value = "from agenda d where d.is_available = 0", nativeQuery = true)
+    @Query(value = "select * from agenda d where d.is_available = 1", nativeQuery = true)
     List<Agenda> listOnlyAvailable();
 }
