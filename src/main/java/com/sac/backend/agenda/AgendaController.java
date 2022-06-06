@@ -46,4 +46,9 @@ public class AgendaController implements Control<Agenda>{
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return ResponseEntity.ok(agendaService.listOnlyAvailable());
     }
+
+    @GetMapping(value = "/status")
+    public ResponseEntity<List<Agenda>> getByStatus() {
+        return ResponseEntity.ok(agendaService.listOnlyAvailable());
+    }
 }
