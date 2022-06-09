@@ -1,46 +1,59 @@
 package com.sac.backend.appuser;
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class AppUserService implements UserDetailsService {
-
-    private static final String USER_NOT_FOUND_ERROR_MESSAGE = "NENHUM USUÁRIO COM O EMAIL -> '%s' FOI ENCONTRADO!";
-    private static final String USER_ALREADY_EXISTS = "O NOME DE USUÁRIO -> '%s' NÃO ESTÁ DISPONÍVEL!";
+    private static final String USER_OR_EMAIL_ALREADY_EXISTS = "O NOME DE USUÁRIO OU O EMAIL-> '%s' ou '%s' JÁ EXISTE!";
 
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return appUserRepository.findByUsername(username)
-                .orElseThrow( () ->
-                        new UsernameNotFoundException(String.format(USER_NOT_FOUND_ERROR_MESSAGE, username))
-                );
-    }
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-    public String signUpUser(AppUser appUser) {
-        boolean userExists = appUserRepository.findByUsername(appUser.getUsername()).isPresent();
-
-        if (userExists) {
-            throw new IllegalStateException(String.format(USER_ALREADY_EXISTS, appUser.getUsername()));
+        for (AppUserRole role : AppUserRole.values()) {
+            authorities.add(new SimpleGrantedAuthority(role.name()));
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
+        return new User(appUser.get().getUsername(), appUser.get().getPassword(), authorities);
+    }
 
-        appUser.setPassword(encodedPassword);
+    public Boolean saveAppUser(AppUser appUser) {
+        boolean usernameExists = appUserRepository.findByUsername(appUser.getUsername()).isPresent();
+        boolean emailExists = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
+
+        if (usernameExists || emailExists) {
+            throw new IllegalStateException(String.format(USER_OR_EMAIL_ALREADY_EXISTS, appUser.getUsername(), appUser.getEmail()));
+        }
+        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
 
         appUserRepository.save(appUser);
 
-        return "USUÁRIO CRIADO COM SUCESSO!";
+        return true;
+    }
+
+    public Optional<AppUser> getAppUser(String username) {
+        return appUserRepository.findByUsername(username);
+    }
+
+    public List<AppUser> getAppUsers() {
+        return appUserRepository.findAll();
     }
 }
