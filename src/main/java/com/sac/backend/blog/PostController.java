@@ -19,6 +19,7 @@ public class PostController {
     private final PostService postService;
     private final FileService fileService;
 
+    @GetMapping(value = "/")
     public ResponseEntity<List<Post>> getAll() {
         return ResponseEntity.ok(postService.findAll());
     }
