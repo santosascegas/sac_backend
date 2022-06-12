@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Confirmação de Agendamento</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <h2>Santos às Cegas</h2>
+    <h4>Olá <span th:text="${name}"></span>!! Estamos entrando em contato para informar que seu agendamento foi realizado com sucesso!</h4>
+    <p><strong>Data do trajeto:</strong> <span th:text="${appointmentDay}"></span></p>
+    <p><strong>Horário:</strong> <span th:text="${appointmentHour}"></span></p>
+    <br>
+
+    <span th:if="${doctorsNote}">
+        <p>
+            Por favor, não se esqueça de apresentar seu atestado médico no dia do seu trajeto.
+            <br>
+        </p>
+    </span>
+
+    <p>Temos algumas dicas para melhorar ainda mais a sua experiência durante o trajeto!</p>
+    <br>
+    <p>O ponto de encontro:</p>
+    <p>Canal 1 (Senador Pinheiro Machado) com a praia, ao lado dos quiosques.</p>
+    <br>
+    <p>Em caso de chuva no dia do trajeto, observaremos a situação da chuva, entraremos em contato com você para remarcar o trajeto ou não. No caso de chuva ao longo do trajeto, faremos uma parada em um local alternativo.</p>
+    <br>
+    <p>Para essa e outras informações visite nossa página de dúvidas frequentes em nosso site:</p>
+    <a href='http://localhost:3000/faq'>Dúvidas Frequentes</a>
+    <br>
+    <br>
+    <p>Atenciosamente,</p>
+    <strong>Equipe Santos às cegas</strong>
+</body>
+</html>

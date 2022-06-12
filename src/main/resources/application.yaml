@@ -1,0 +1,45 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+uploads:
+  root_path: /uploads
+  clients_path: /files
+
+spring:
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/sacdb
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 3MB
+
+  mail:
+    host: localhost
+    port: 1025
+    username: hello@admin.com
+    password: hello
+
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000

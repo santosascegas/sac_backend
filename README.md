@@ -1,5 +1,14 @@
-# Backend da Aplicação do Projeto Santos as Cegas
+# sac_backend
 
-Integrantes: Amanda Valado, Bruna Pereira, Gabriel Reis, João Rafael, Lucas Monteiro, Luciana Lorrany, Marcel Losso, Mauricio Freire e Vinnicius Stein
-Link da documentação geral do projeto (Os diagramas também estão presentes na documentação do projeto)
-https://docs.google.com/document/d/12oxcEu5Lv1lFI1cnDxGB2RzchCD9rsJXfzbLDdDW0q4/edit?usp=sharing
+Para o desenvolvimento desta API foi usada as seguintes tecnologias:
+
+* Amazon Corretto 17 OpenJDK
+* Maven
+* Spring Boot
+* MySQL
+
+Para rodar a API será necessário algumas configurações, sendo elas:
+
+1. Será necessário a configuração de algum serviço de email. Para o desenvolvimento é recomendado o uso do MailDev.
+    * Após a configuração do MailDev como descrito na pagina do GitHub deles, insira o usuario e a senha configurada no arquivo `src/main/resources/application.yaml` no trecho mail.
+2. Configure também, o servidor SQL que nesse caso é o MySQL no arquivo `src/main/resources/application.yaml` no trecho `spring -> datasource`.
