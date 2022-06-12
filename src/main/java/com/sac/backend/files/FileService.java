@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -52,9 +53,10 @@ public class FileService {
 
     public FileStorage generateFS(MultipartFile file) {
         try {
+            Random salt = new Random();
             FileStorage f = new FileStorage();
             if (!Objects.equals(file.getOriginalFilename(), "")) {
-                String fileName = new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
+                String fileName = new Date().getTime() + salt.nextInt(10) + "-file." + getFileExtension(file.getOriginalFilename());
                 Files.copy(file.getInputStream(), this.root.resolve(fileName));
                 f.setFileName(fileName);
                 f.setPath(this.root.resolve(fileName).toString());
