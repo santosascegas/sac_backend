@@ -1,9 +1,5 @@
 package com.sac.backend.blog;
 
-import com.sac.backend.appointment.Appointment;
-import com.sac.backend.appointment.AppointmentRepository;
-import com.sac.backend.files.FileService;
-import com.sac.backend.interfaces.ServiceInterface;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,13 +15,17 @@ public class PostService {
 
     public Post create(Post obj, MultipartFile file, MultipartFile audio) {
         System.out.println(audio.getName());
-        obj.setIsActive(true);
+        obj.setIsPublic(true);
         postRepository.save(obj);
         return obj;
     }
 
-    public Optional<Post> findById(Long id) {
+    public Optional<Post> findByIdAdmin(Long id) {
         return postRepository.findById(id);
+    }
+
+    public Optional<Post> findById(Long id) {
+        return postRepository.findByIdPublic(id);
     }
 
     public List<Post> findAll() {
@@ -46,5 +46,9 @@ public class PostService {
             return true;
         }
         return false;
+    }
+
+    public List<Post> findAllPublic() {
+        return postRepository.listAllPublic();
     }
 }
