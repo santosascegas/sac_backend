@@ -14,7 +14,6 @@ public class PostService {
     private final PostRepository postRepository;
 
     public Post create(Post obj, MultipartFile file, MultipartFile audio) {
-        System.out.println(audio.getName());
         obj.setIsPublic(true);
         postRepository.save(obj);
         return obj;
