@@ -19,7 +19,8 @@ public class CreateUsersAtStartup implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         fileService.init();
-        appUserRepository.save(new AppUser("admin", "admin@admin.com", bCryptPasswordEncoder.encode("admin"), AppUserRole.ADMIN, true));
-        appUserRepository.save(new AppUser("user", "user@user.com", bCryptPasswordEncoder.encode("user"), AppUserRole.USER, true));
+        if (appUserRepository.findByUsername("admin").isEmpty()) {
+            appUserRepository.save(new AppUser("admin", "admin@admin.com", bCryptPasswordEncoder.encode("admin"), AppUserRole.ADMIN, true));
+        }
     }
 }
