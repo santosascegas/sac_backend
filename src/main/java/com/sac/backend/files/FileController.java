@@ -1,6 +1,7 @@
 package com.sac.backend.files;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,13 +11,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping("/files")
+@Slf4j
 public class FileController {
 
     private final FileService fileService;
@@ -35,7 +39,7 @@ public class FileController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Resource> getFile(@PathVariable Long id, HttpServletRequest request) throws FileNotFoundException {
+    public ResponseEntity<Resource> getFile(@PathVariable Long id, HttpServletRequest request) throws IOException {
         Resource file = fileService.load(id);
 
         String contentType = null;
