@@ -1,6 +1,5 @@
 package com.sac.backend.blog;
 
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.sac.backend.files.FileStorage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +31,7 @@ public class Post {
     @Column(updatable = false)
     private Date created_at;
 
-    private Boolean isActive = false;
+    private Boolean isPublic = false;
 
     @Column(length = 2000)
     private String message;

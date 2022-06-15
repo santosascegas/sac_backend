@@ -1,10 +1,13 @@
 package com.sac.backend.files;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.yaml.snakeyaml.util.EnumUtils;
 
 import java.io.IOException;
@@ -18,6 +21,7 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class FileService {
 
     private final FileRepository fileRepository;
@@ -25,7 +29,9 @@ public class FileService {
 
     public void init() {
         try {
-            Files.createDirectory(root);
+            if (!Files.exists(root)) {
+                Files.createDirectory(root);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -95,7 +101,12 @@ public class FileService {
 
     public Resource load(Long id) {
         try {
-            Path file = root.resolve(fileRepository.getById(id).getFileName());
+            Path file = null;
+            try {
+                file = root.resolve(fileRepository.getById(id).getFileName());
+            } catch (NullPointerException e) {
+                return new UrlResource("404");
+            }
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
@@ -104,7 +115,8 @@ public class FileService {
                 throw new RuntimeException("Não foi possivel ler o arquivo!");
             }
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            log.error("ARQUIVO NÃO ENCONTRADO!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 

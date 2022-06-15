@@ -19,9 +19,20 @@ public class PostController {
     private final PostService postService;
     private final FileService fileService;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/todos")
     public ResponseEntity<List<Post>> getAll() {
         return ResponseEntity.ok(postService.findAll());
+    }
+
+    @GetMapping(value = "/")
+    public ResponseEntity<List<Post>> getAllPublic() {
+        return ResponseEntity.ok(postService.findAllPublic());
+    }
+
+    @GetMapping(value = "/admin/{id}")
+    public ResponseEntity<?> getByIdAdmin(@PathVariable Long id) {
+        Optional<Post> result = postService.findByIdAdmin(id);
+        return result.isPresent() ? ResponseEntity.ok(result) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping(value = "/{id}")
@@ -35,8 +46,15 @@ public class PostController {
         MultipartFile file = obj.getImage();
         MultipartFile audio = obj.getAudio();
         Post p = new Post();
-        FileStorage f = fileService.generateFS(file);
-        FileStorage a = fileService.generateFS(audio);
+        FileStorage f = new FileStorage();
+        FileStorage a = new FileStorage();
+
+        if (file.getSize() > 0) {
+            f = fileService.generateFS(file);
+        }
+        if (audio.getSize() > 0) {
+            a = fileService.generateFS(audio);
+        }
 
         p.setMessage(obj.getMessage());
         p.setName(obj.getName());
