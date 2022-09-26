@@ -8,13 +8,13 @@ uploads:
   clients_path: /files
 
 jwt:
-  secret: "27d5c06e313b42a0c13a6a585fde2fb78bec6e5c9793bd77d0077ccfc937973c"
+  secret: ${JWT_SECRET}
 
 spring:
   datasource:
-    password: root
-    url: jdbc:mysql://localhost:3306/sacdb
-    username: root
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    username: ${DB_USER}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -30,10 +30,10 @@ spring:
       max-request-size: 3MB
 
   mail:
-    host: localhost
-    port: 1025
-    username: hello@admin.com
-    password: hello
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_LOGIN}
+    password: ${MAIL_PASSWORD}
 
     properties:
       mail:
